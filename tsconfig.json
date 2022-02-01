@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "target": "ES2015",
+    "strict": true,
+    "sourceMap": true,
+    "rootDir": "src"
+  }
+}
