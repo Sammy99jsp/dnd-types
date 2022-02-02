@@ -452,5 +452,115 @@ export namespace DND_5E {
                 }
         }
     }
+
+    export namespace Ability {``
+        export interface Strength extends System.Ability {
+            _       : "SRD.ABILITY.STRENGTH";
+            Name    : "Strength";
+            Short   : "STR";
+            References : Reference[];
+        }
+
+        export const STRENGTH : Strength = {
+            _: "SRD.ABILITY.STRENGTH",
+            Name: "Strength",
+            Short: "STR",
+            References: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Strength"})]
+        }; 
+
+        export interface Dexterity extends System.Ability {
+            _       : "SRD.ABILITY.DEXTERITY";
+            Name    : "Dexterity";
+            Short   : "DEX";
+            References : Reference[];
+        }
+
+        export const DEXTERITY : Dexterity = {
+            _       : "SRD.ABILITY.DEXTERITY",
+            Name    : "Dexterity",
+            Short   : "DEX",
+            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Dexterity" })]
+        }; 
+
+        export interface Constitution extends System.Ability {
+            _       : "SRD.ABILITY.CONSTITUTION";
+            Name    : "Constitution";
+            Short   : "CON";
+            References : Reference[];
+        }
+
+        export const CONSTITUTION : Constitution = {
+            _       : "SRD.ABILITY.CONSTITUTION",
+            Name    : "Constitution",
+            Short   : "CON",
+            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Constitution" })]
+        }; 
+
+        export interface Intelligence extends System.Ability {
+            _       : "SRD.ABILITY.INTELLIGENCE";
+            Name    : "Intelligence";
+            Short   : "INT";
+            References : Reference[];
+        }
+
+        export const INTELLIGENCE : Intelligence = {
+            _       : "SRD.ABILITY.INTELLIGENCE",
+            Name    : "Intelligence",
+            Short   : "INT",
+            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Intelligence"})]
+        }; 
+
+        export interface Wisdom extends System.Ability {
+            _       : "SRD.ABILITY.WISDOM";
+            Name    : "Wisdom";
+            Short   : "WIS";
+            References : Reference[];
+        }
+
+        export const WISDOM : Wisdom = {
+            _       : "SRD.ABILITY.WISDOM",
+            Name    : "Wisdom",
+            Short   : "WIS",
+            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Wisdom"})]
+        }; 
+
+        export interface Charisma extends System.Ability {
+            _       : "SRD.ABILITY.CHARISMA";
+            Name    : "Charisma";
+            Short   : "CHA";
+            References : Reference[];
+        }
+
+        export const CHARISMA : Charisma = {
+            _       : "SRD.ABILITY.CHARISMA",
+            Name    : "Charisma",
+            Short   : "CHA",
+            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Charisma" })]
+        }; 
+
+        const MakeScore = <A extends System.Ability>(Ability: A) => (
+            (Score : System.Ability.Score) => ({Ability, Score})
+        );
+
+        export const STR = MakeScore(STRENGTH);
+        export const DEX = MakeScore(DEXTERITY);
+        export const CON = MakeScore(CONSTITUTION);
+        export const INT = MakeScore(INTELLIGENCE);
+        export const WIS = MakeScore(WISDOM);
+        export const CHA = MakeScore(CHARISMA);
+
+        export namespace Score {
+            export const CalculateModifier = (Score : number) => Math.floor((Score - 10) / 2);
+            
+            export const RAW = (Raw : number) : System.Ability.Score => ({
+                _: "SRD.ABILITY.SCORE",
+                Score: Raw,
+                Modifier : CalculateModifier(Raw), 
+            });
+
+            // TODO: Make a complete proxy, using an entity's racial and class features which can effect the score/modifier.
+
+        }
+    }
 }
 

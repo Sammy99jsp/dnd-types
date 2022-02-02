@@ -82,6 +82,48 @@ export namespace Reference {
 }
 
 export namespace System {
+    export interface Ability extends _ {
+        _: `SRD.ABILITY.${string}`;
+
+        Name        : string;
+        Short       : string;
+
+        References ?: Reference[];
+    }
+
+    export namespace Ability {
+        /**
+         * A public-facing interface for an abiliy's score and modifier.
+         * 
+         * This will most likely be implemented as a JS proxy to
+         * take into account any extra changes from other sources of the Entity.
+         */
+        export interface Score extends _ {
+            _        : `SRD.ABILITY.SCORE`
+            Score    : int;
+            Modifier : int; 
+        }
+
+        export namespace Score {
+            /**
+             * How an ability score is likely to be stored.
+             */
+            export interface $ extends _ {
+                _         :     "SRD.ABILITY.SCORE.$";
+                Raw       :     int;
+                Override ?: {
+                    Score    ?: int;
+                    Modifier ?: int;
+                }
+            }
+        }
+
+        export interface AbilityScore<A extends Ability> {
+            Ability : A;
+            Score   : Score;
+        }
+    }
+
     export interface Entity extends _ {
         _       : "SRD.ENTITY";
         
@@ -90,6 +132,8 @@ export namespace System {
 
         Race    : unknown;
         Class   : unknown[];
+
+
     }
 
     export namespace Entity {
@@ -97,7 +141,7 @@ export namespace System {
     }
 
     /**
-     * Consult:
+     * Consult Wiki:
      *      [About Spells](https://www.dandwiki.com/wiki/5e_SRD:About_Spells),
      *      [Casting a Spell](https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell)
      */
@@ -180,6 +224,7 @@ export namespace System {
             /**
              * Access the spell at a particular level using the level as an index.
              * Returns undefined if the level is not available at that level.
+             * @param targets Target entities for this spell.
              */
             [level : number] : (this: T, ...targets: Targets) => void;
         }
