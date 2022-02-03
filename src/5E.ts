@@ -1,4 +1,4 @@
-import { System, Reference, Utils } from "./System";
+import { System as S, Reference, Utils } from "./System";
 
 /**
  * Actual 5E SRD content
@@ -69,7 +69,7 @@ export namespace DND_5E {
 
     export namespace Spell {
         export namespace Range {
-            interface Self extends System.Spell.Range {
+            interface Self extends S.Spell.Range {
                 _: "SRD.SPELL.RANGE.SELF";
                 Size: "Self";
             }
@@ -79,7 +79,7 @@ export namespace DND_5E {
                 Size: "Self"
             });
 
-            interface Touch extends System.Spell.Range {
+            interface Touch extends S.Spell.Range {
                 _: "SRD.SPELL.RANGE.TOUCH";
                 Size: "Touch";
             }
@@ -89,7 +89,7 @@ export namespace DND_5E {
                 Size: "Touch"
             });
 
-            interface Static extends System.Spell.Range {
+            interface Static extends S.Spell.Range {
                 _: "SRD.SPELL.RANGE.STATIC";
                 Size: Utils.UnitValue<Utils.Unit.Distance, number | string>;
             }
@@ -102,7 +102,7 @@ export namespace DND_5E {
         }
 
         export namespace Component {
-            interface V extends System.Spell.Component {
+            interface V extends S.Spell.Component {
                 _           : "SRD.SPELL.COMPONENT.VERBAL",
                 Initial     : "V",
                 Name        : "Verbal",
@@ -121,7 +121,7 @@ export namespace DND_5E {
             });
 
 
-            interface S extends System.Spell.Component {
+            interface S extends S.Spell.Component {
                 _           : "SRD.SPELL.COMPONENT.SOMANTIC",
                 Initial     : "S",
                 Name        : "Somantic",
@@ -140,7 +140,7 @@ export namespace DND_5E {
             });
 
 
-            interface M extends System.Spell.Component {
+            interface M extends S.Spell.Component {
                 _           : "SRD.SPELL.COMPONENT.MATERIAL",
                 Initial     : "M",
                 Name        : "Material",
@@ -166,7 +166,7 @@ export namespace DND_5E {
              * Spells that are immeadiately cast:
              * [Wiki](https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous)
              */
-            export interface Instantaneous extends System.Spell.Duration {
+            export interface Instantaneous extends S.Spell.Duration {
                 _           : "SRD.SPELL.DURATION.INSTANTANEOUS",
                 References  : Reference[]
             };
@@ -178,7 +178,7 @@ export namespace DND_5E {
 
             /// Concentration
 
-            export interface Concentration extends System.Spell.Duration {
+            export interface Concentration extends S.Spell.Duration {
                 _           : "SRD.SPELL.DURATION.CONCENTRATION",
                 References  : Reference[],
             }
@@ -195,7 +195,7 @@ export namespace DND_5E {
 
             /// Action
 
-            export interface Action extends System.Spell.Duration {
+            export interface Action extends S.Spell.Duration {
                 _           : "SRD.SPELL.DURATION.ACTION",
                 References  : Reference[],
             }
@@ -207,7 +207,7 @@ export namespace DND_5E {
 
             /// Bonus Action
 
-            export interface BonusAction extends System.Spell.Duration {
+            export interface BonusAction extends S.Spell.Duration {
                 _           : "SRD.SPELL.DURATION.BONUS_ACTION",
                 References  : Reference[],
             }
@@ -219,7 +219,7 @@ export namespace DND_5E {
 
             /// Reaction
 
-            export interface Reaction extends System.Spell.Duration {
+            export interface Reaction extends S.Spell.Duration {
                 _           : "SRD.SPELL.DURATION.REACTION",
                 References  : Reference[],
             }
@@ -231,7 +231,7 @@ export namespace DND_5E {
 
             // Flat (Static) amount Time
 
-            export interface Static extends System.Spell.Duration {
+            export interface Static extends S.Spell.Duration {
                 _: "SRD.SPELL.DURATION.STATIC",
 
                 References ?: Reference[],
@@ -247,47 +247,47 @@ export namespace DND_5E {
         }
 
         export namespace School {
-            export const ABJURATION : System.Spell.School = {
+            export const ABJURATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.ABJURATION",
                 Name : "Abjuration",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Abjuration_School"})]
             };
-            export const CONJURATION : System.Spell.School = {
+            export const CONJURATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.CONJURATION",
                 Name : "Conjuration",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Conjuration_School"})]
             };
-            export const DIVINATION : System.Spell.School = {
+            export const DIVINATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.DIVINATION",
                 Name : "Divination",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Divination_School"})]
             };
-            export const ENCHANTMENT : System.Spell.School = {
+            export const ENCHANTMENT : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.ENCHANTMENT",
                 Name : "Enchantment",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Enchantment_School"})]
             };
-            export const EVOCATION : System.Spell.School = {
+            export const EVOCATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.EVOCATION",
                 Name : "Evocation",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Evocation_School"})]
             };
-            export const ILLUSION : System.Spell.School = {
+            export const ILLUSION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.ILLUSION",
                 Name : "Illusion",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Illusion_School"})]
             };
-            export const NECROMANCY : System.Spell.School = {
+            export const NECROMANCY : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.NECROMANCY",
                 Name : "Necromancy",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Necromancy_School"})]
             };
-            export const TRANSMUTATION : System.Spell.School = {
+            export const TRANSMUTATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.TRANSMUTATION",
                 Name : "Transmutation",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Transmutation_School"})]
             };
-            export const UNIVERSAL : System.Spell.School = {
+            export const UNIVERSAL : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.UNIVERSAL",
                 Name : "Universal",
                 References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Universal_School"})]
@@ -366,31 +366,33 @@ export namespace DND_5E {
             })
         }
 
+        // Helps with defining a spell
         export namespace Levels {
-            interface LevelScaleParams<T extends System.Spell.DataStruct> {
+            interface LevelScaleParams<T extends S.Spell.DataStruct> {
                 Available   ?: number[],
                 Start       ?: number,
                 End         ?: number,
                 Higher       : (this: T, lvl : number) => T,
-                Executor     : (this: T, ...Targets : System.Spell.Targets) => void,
+                Executor     : (this: T, ...Targets : S.Spell.Targets) => void,
                 Data         : T
             }
             /**
+             * Defines the functionality of a spell (including at higher levels).
              * 
              * @param Data A shared object that is used to execute the spell.
              * @param Higher A function that alters {@link Data} for higher levels.
              * 
              */
             export const Scale :
-                <T extends System.Spell.DataStruct>(
+                <T extends S.Spell.DataStruct>(
                     {Data, Start, Higher, End, Available, Executor} : 
                     LevelScaleParams<T>
-                ) => System.Spell.Levels<T> = <T>(
+                ) => S.Spell.Levels<T> = <T>(
                     {Start, Higher, End, Available, Executor, Data} :
                     LevelScaleParams<T>
                 ) => {
 
-                    // The object to do our magic on.
+                    // A fresh Data object to do our magic on.
                     const temp = {...Data};
 
                     // Get the range of available levels for this spell.
@@ -423,18 +425,18 @@ export namespace DND_5E {
                                 if(Number.isSafeInteger(parseInt(prop))) {
                                     lvl = parseInt(prop); 
 
-                                    // You can access levels by treating the proxy as an array (e.g. Levels[0]) 
+                                    // You can access levels of a spell by treating the proxy as an array (e.g. Levels[0]) 
                                     if(lvl < (Start ?? 0) || lvl > (End ?? 9) || range.indexOf(lvl) === -1) {
                                         throw new Error("Outside casting level range of spell!");
                                     }
 
                                     if(lvl === (Start ?? 0)) {
-                                        return (...targets : System.Spell.Targets) => Executor.call(targetObj, ...targets);
+                                        return (...targets : S.Spell.Targets) => Executor.call(targetObj, ...targets);
                                     }
         
-                                    // Alter our data object for a higher-level cast
+                                    // Alter our Data object for a higher-level cast
                                     if(lvl <= (End ?? 9)) {
-                                        return (...targets : System.Spell.Targets) => 
+                                        return (...targets : S.Spell.Targets) => 
                                             Executor.call(
                                                 Higher.call({...targetObj}, lvl),
                                                 ...targets
@@ -448,13 +450,13 @@ export namespace DND_5E {
 
                     const proxy = new Proxy(Data, handler);
 
-                    return proxy as System.Spell.Levels<T>; 
+                    return proxy as S.Spell.Levels<T>; 
                 }
         }
     }
 
-    export namespace Ability {``
-        export interface Strength extends System.Ability {
+    export namespace Ability {
+        export interface Strength extends S.Ability {
             _       : "SRD.ABILITY.STRENGTH";
             Name    : "Strength";
             Short   : "STR";
@@ -468,7 +470,7 @@ export namespace DND_5E {
             References: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Strength"})]
         }; 
 
-        export interface Dexterity extends System.Ability {
+        export interface Dexterity extends S.Ability {
             _       : "SRD.ABILITY.DEXTERITY";
             Name    : "Dexterity";
             Short   : "DEX";
@@ -482,7 +484,7 @@ export namespace DND_5E {
             References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Dexterity" })]
         }; 
 
-        export interface Constitution extends System.Ability {
+        export interface Constitution extends S.Ability {
             _       : "SRD.ABILITY.CONSTITUTION";
             Name    : "Constitution";
             Short   : "CON";
@@ -496,7 +498,7 @@ export namespace DND_5E {
             References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Constitution" })]
         }; 
 
-        export interface Intelligence extends System.Ability {
+        export interface Intelligence extends S.Ability {
             _       : "SRD.ABILITY.INTELLIGENCE";
             Name    : "Intelligence";
             Short   : "INT";
@@ -510,7 +512,7 @@ export namespace DND_5E {
             References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Intelligence"})]
         }; 
 
-        export interface Wisdom extends System.Ability {
+        export interface Wisdom extends S.Ability {
             _       : "SRD.ABILITY.WISDOM";
             Name    : "Wisdom";
             Short   : "WIS";
@@ -524,7 +526,7 @@ export namespace DND_5E {
             References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Wisdom"})]
         }; 
 
-        export interface Charisma extends System.Ability {
+        export interface Charisma extends S.Ability {
             _       : "SRD.ABILITY.CHARISMA";
             Name    : "Charisma";
             Short   : "CHA";
@@ -538,8 +540,8 @@ export namespace DND_5E {
             References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Charisma" })]
         }; 
 
-        const MakeScore = <A extends System.Ability>(Ability: A) => (
-            (Score : System.Ability.Score) => ({Ability, Score})
+        const MakeScore = <A extends S.Ability>(Ability: A) => (
+            (Score : S.Ability.Score) => ({Ability, Score})
         );
 
         export const STR = MakeScore(STRENGTH);
@@ -552,7 +554,7 @@ export namespace DND_5E {
         export namespace Score {
             export const CalculateModifier = (Score : number) => Math.floor((Score - 10) / 2);
             
-            export const RAW = (Raw : number) : System.Ability.Score => ({
+            export const RAW = (Raw : number) : S.Ability.Score => ({
                 _: "SRD.ABILITY.SCORE",
                 Score: Raw,
                 Modifier : CalculateModifier(Raw), 
@@ -560,6 +562,40 @@ export namespace DND_5E {
 
             // TODO: Make a complete proxy, using an entity's racial and class features which can effect the score/modifier.
 
+        }
+
+        export namespace Skill {
+
+
+
+            export namespace Proficiency {
+                export const HALF_PROFICIENT: S.Ability.Skill.Proficiency = {
+                    _   : `SRD.ABILITY.SKILL.PROFICIENCY.HALF_PROFICIENT`,
+                    Name: "Half-proficient",
+                    Action: function(ProficienyBonus) {
+                        return Math.floor(ProficienyBonus / 2);
+                    },
+                    Reference: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/Jack_of_All_Trades_(5e_Feat)" })]
+                }
+
+                export const PROFICIENT: S.Ability.Skill.Proficiency = {
+                    _   : `SRD.ABILITY.SKILL.PROFICIENCY.PROFICIENT`,
+                    Name: "Proficent",
+                    Action: function(ProficiencyBonus) {
+                        return Math.floor(ProficiencyBonus);
+                    },
+                    Reference: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Proficiency_Bonus" })]
+                }
+
+                export const EXPERTISE: S.Ability.Skill.Proficiency = {
+                    _   : `SRD.ABILITY.SKILL.PROFICIENCY.EXPERTISE`,
+                    Name: "Expertise",
+                    Action: function(ProficiencyBonus) {
+                        return Math.floor(ProficiencyBonus * 2);
+                    },
+                    Reference: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Rogue#Expertise" })]
+                }
+            }
         }
     }
 }

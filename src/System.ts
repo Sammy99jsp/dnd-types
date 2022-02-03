@@ -1,20 +1,27 @@
 /**
- * Namespace interface.
+ * A namespaced ID for most objects.
  */
 interface _ {
     _: string
 }
 
+/**
+ * The dollar sign ($) is a short hand for $torable objects,
+ *  and which only store information.
+ * 
+ * They are often just more conscise versions of existing interfaces,
+ *  whose objects which can be stored in a database, .json file, or similar.
+ * 
+ */
+interface $ {}
+
+// I wish Typescript had support for an int type :(
 export type int = number;
 
-export type ID = `${string}-${string}-4${string}-${string}-${string}`;
-
-export interface Reference extends _ {
-    _ : `UTILS.REFERENCE.${string}`;
-} 
+export type ID = `${string}-${string}-4${string}-${string}-${string}`; // UUID v4
 
 export namespace Utils {
-
+    
     export interface Unit {
         _          : `UTILS.UNIT.${string}`;
     
@@ -22,7 +29,7 @@ export namespace Utils {
         Name       : string;
     
         /**
-         * Where does the unit go? Before (-1), or after (+1);
+         * Where does the unit go? Before (-1), or after (+1) the value?
          */
         Position   : -1 | 1;
     }
@@ -37,6 +44,10 @@ export namespace Utils {
         export interface Time extends Unit {
             _ : "UTILS.UNIT.TIME"
         }
+
+        /// Helper functions for defining new units.
+
+
         export const DISTANCE : ({Symbol, Name, Position} : {Symbol : string, Name : string, Position ?: -1 | 1}) => Distance = 
             ({Symbol, Name, Position}) => ({_ : "UTILS.UNIT.DISTANCE", Symbol, Name, Position : Position ?? 1});
     
@@ -46,6 +57,8 @@ export namespace Utils {
         export const TIME     : ({Symbol, Name, Position} : {Symbol : string, Name : string, Position ?: -1 | 1}) => Time = 
             ({Symbol, Name, Position}) => ({_ : "UTILS.UNIT.TIME", Symbol, Name, Position : Position ?? 1});
     }
+
+    // A unit-value pair
     
     export interface UnitValue<U extends Unit, V> {
         Unit : U,
@@ -53,8 +66,13 @@ export namespace Utils {
     }
 }
 
+/**
+ * References — used to cite a source for a particular in-game property/object.
+ */
 
-
+export interface Reference extends _ {
+    _ : `UTILS.REFERENCE.${string}`;
+} 
 // TODO: Add ability to get certain descriptions.
 export namespace Reference {
     export interface Book extends Reference {
@@ -92,11 +110,40 @@ export namespace System {
     }
 
     export namespace Ability {
+
+        export interface Skill extends _ {
+            _       :   `SRD.ABILITY.SKILL.${string}`;
+            Name    :   string;
+        }
+
+        export namespace Skill {
+            /**
+             * For defining a type of proficiency such as:
+             * 
+             * [half-proficient](https://www.dandwiki.com/wiki/5e_SRD:Bard#Jack_of_All_Trades), [proficient](https://www.dandwiki.com/wiki/5e_SRD:Proficiency_Bonus), or [expertise](https://www.dandwiki.com/wiki/5e_SRD:Rogue#Expertise)
+             */
+            export interface Proficiency extends _ {
+                _         :   `SRD.ABILITY.SKILL.PROFICIENCY.${string}`;
+
+                Name      : string;
+                Reference?: Reference[]; 
+
+                /**
+                 * Calculates altered proficiency bonus
+                 */
+                Action    : (this : Entity, ProficiencyBonus : int) => int;
+            }
+
+            export namespace Proficiency {
+                export type $ = Proficiency["_"];
+            }
+        }  
+
         /**
-         * A public-facing interface for an abiliy's score and modifier.
+         * A public-facing interface for an ability's score and modifier.
          * 
          * This will most likely be implemented as a JS proxy to
-         * take into account any extra changes from other sources of the Entity.
+         * take into account any extra changes from other sources.
          */
         export interface Score extends _ {
             _        : `SRD.ABILITY.SCORE`
@@ -122,6 +169,33 @@ export namespace System {
             Ability : A;
             Score   : Score;
         }
+
+        export namespace AbilityScore {
+            export interface $<A extends Ability> {
+                Ability: A["_"];
+                Score  : Score.$;
+            }
+        }
+
+        export interface DifficultyClass<A extends Ability> extends _ {
+            _   : "SRD.ABILITY.DIFFICULTY_CLASS";
+            DC  : int;
+            Ability : A;
+        }
+
+
+        export namespace DifficultyClass {
+            export interface $<A extends Ability> extends _ {
+                _   : `SRD.ABILITY.DIFFICULTY_CLASS.$`;
+                DC  : int;
+                /**
+                 * Reference the _ (namespaced ID) of the ability.
+                 */
+                Ability : A["_"];
+            }
+        }
+
+        
     }
 
     export interface Entity extends _ {
@@ -220,7 +294,7 @@ export namespace System {
          * Iterate over the object to see all available levels.
          */
         export interface Levels<T extends DataStruct> extends _, Iterable<number> {
-            _        : "SRD.SPELL.LEVELS";
+            _           : "SRD.SPELL.LEVELS";
             /**
              * Access the spell at a particular level using the level as an index.
              * Returns undefined if the level is not available at that level.

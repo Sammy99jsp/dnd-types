@@ -1,6 +1,12 @@
 import { DND_5E as D } from "../5E";
 import { System as S, Reference } from "../System";
 
+/**
+ * An implementation of the basics of the Moonbeam spell.
+ * 
+ * As you can (hopefully) see, the aim is to make the process as declarative as possible,
+ *      (possibly at the expense of extra verbosity).
+ */
 const Moonbeam : S.Spell<any> = {
     _: "SRD.SPELL.MOONBEAM",
     Name: "Moonbeam",
@@ -19,17 +25,27 @@ const Moonbeam : S.Spell<any> = {
     ],
     Levels: D.Spell.Levels.Scale({
         Data : {
+            // Mainly use this for values that change dependent on the level. 
             Damage : { 
                 Die: "d10",
-                Amount: 1
+                Amount: 1,
+                Type : "radiant" /// TODO: Damage Types.
             }
         },
-        Start: 2,
-        Higher: function(lvl) {
+
+        Start: 2,  // Available from 2nd-level.
+
+        Higher: function(lvl) { 
+            // The 'this' context is the same 'Data' object we defined above
+            //      (but not a reference to the original — It's nice and fresh for us to modify).
+            
+        
             // Give an extra d10 radiant damage for every level over 2nd.
             this.Damage.Amount += lvl - 2;
             return this;
         },
+
+        // Function that does the actual 'meat' of the spell.
         Executor: function(...targets) {
             // this.Damage.Amount will now give the appropriate number of dice,
             //      based on the Higher function's modifications.
