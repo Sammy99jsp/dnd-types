@@ -1,0 +1,36 @@
+{
+	// Place your types3 workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+
+	"SKILL": {
+		"scope": "typescript",
+		"prefix": "@skill",
+		"body": [
+			"export interface $1 extends S.Ability.Skill<Ability.${2|Strength,Dexterity,Intelligence,Wisdom,Charisma,Constitution|}> {",
+            "    _       :  `SRD.ABILITY.SKILL.${1/(.*)/${1:/upcase}/}`;",
+            "    Name    :  `$1`;",
+            "}",
+			"",
+            "export const ${1/(.*)/${1:/upcase}/} : $1 = {",
+			"    _       :  `SRD.ABILITY.SKILL.${1/(.*)/${1:/upcase}/}`,",
+            "    Name    :  `$1`,",
+            "    Ability :  ${2/(.*)/${1:/upcase}/},",
+            "    References :[Reference.WEBSITE({ URL : \"$3\"})]",
+			"};"
+		]
+	}
+}

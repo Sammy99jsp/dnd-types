@@ -1,8 +1,11 @@
 import { System as S } from "../System";
 import { DND_5E as D } from "../5E";
 
-const Test = D.Ability.CHA(
-    D.Ability.Score.RAW(20)
+const testScore = D.Ability.Score.DEX(
+    D.Ability.Score.Raw(12)
 );
 
-console.log(Test);
+const testCheck = D.Ability.Check(
+    15, D.Ability.Skill.PERCEPTION
+);
+

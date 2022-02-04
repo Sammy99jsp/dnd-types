@@ -39,7 +39,7 @@ const Moonbeam : S.Spell<any> = {
             // The 'this' context is the same 'Data' object we defined above
             //      (but not a reference to the original — It's nice and fresh for us to modify).
             
-        
+         
             // Give an extra d10 radiant damage for every level over 2nd.
             this.Damage.Amount += lvl - 2;
             return this;

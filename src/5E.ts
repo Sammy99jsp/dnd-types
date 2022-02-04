@@ -540,21 +540,22 @@ export namespace DND_5E {
             References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Charisma" })]
         }; 
 
-        const MakeScore = <A extends S.Ability>(Ability: A) => (
-            (Score : S.Ability.Score) => ({Ability, Score})
-        );
-
-        export const STR = MakeScore(STRENGTH);
-        export const DEX = MakeScore(DEXTERITY);
-        export const CON = MakeScore(CONSTITUTION);
-        export const INT = MakeScore(INTELLIGENCE);
-        export const WIS = MakeScore(WISDOM);
-        export const CHA = MakeScore(CHARISMA);
-
+        
         export namespace Score {
+            const MakeScore = <A extends S.Ability>(Ability: A) => (
+                (Score : S.Ability.Score) => ({Ability, Score})
+            );
+    
+            export const STR = MakeScore(STRENGTH);
+            export const DEX = MakeScore(DEXTERITY);
+            export const CON = MakeScore(CONSTITUTION);
+            export const INT = MakeScore(INTELLIGENCE);
+            export const WIS = MakeScore(WISDOM);
+            export const CHA = MakeScore(CHARISMA);
+            
             export const CalculateModifier = (Score : number) => Math.floor((Score - 10) / 2);
             
-            export const RAW = (Raw : number) : S.Ability.Score => ({
+            export const Raw = (Raw : number) : S.Ability.Score => ({
                 _: "SRD.ABILITY.SCORE",
                 Score: Raw,
                 Modifier : CalculateModifier(Raw), 
@@ -565,10 +566,9 @@ export namespace DND_5E {
         }
 
         export namespace Skill {
-
-
-
             export namespace Proficiency {
+                // This, and expertise could be expressed as just pure feats, but
+                //      this way, we can uniquely identify their style of proficiency.
                 export const HALF_PROFICIENT: S.Ability.Skill.Proficiency = {
                     _   : `SRD.ABILITY.SKILL.PROFICIENCY.HALF_PROFICIENT`,
                     Name: "Half-proficient",
@@ -596,7 +596,245 @@ export namespace DND_5E {
                     Reference: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Rogue#Expertise" })]
                 }
             }
+
+            export interface Athletics extends S.Ability.Skill<Ability.Strength> {
+                _       : `SRD.ABILITY.SKILL.ATHLETICS`;
+                Name    : "Athletics";
+            }
+
+            export const ATHLETICS : Athletics = {
+                _       : `SRD.ABILITY.SKILL.ATHLETICS`,
+                Name    : "Athletics",
+                Ability : STRENGTH,
+                References : [Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Athletics_Skill" })]
+            }
+
+            export interface Acrobatics extends S.Ability.Skill<Ability.Dexterity> {
+                _       : `SRD.ABILITY.SKILL.ACROBATICS`;
+                Name    : `Acrobatics`;
+            }
+
+            export const ACROBATICS : Acrobatics = {
+                _       :  `SRD.ABILITY.SKILL.ACROBATICS`,
+                Name    : `Acrobatics`,
+                Ability : DEXTERITY,
+                References : [Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Acrobatics_Skill" })]
+            };
+
+            export interface SleightOfHand extends S.Ability.Skill<Ability.Dexterity> {
+                _       : `SRD.ABILITY.SKILL.SLEIGHT_OF_HAND`;
+                Name    : `Sleight of Hand`;
+            }
+            
+            export const SLEIGHT_OF_HAND : SleightOfHand = {
+                _       :  `SRD.ABILITY.SKILL.SLEIGHT_OF_HAND`,
+                Name    :  `Sleight of Hand`,
+                Ability : DEXTERITY,
+                References :  [Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Sleight_of_Hand_Skill"})]
+            };
+            
+            export interface Stealth extends S.Ability.Skill<Ability.Dexterity> {
+                _       :  `SRD.ABILITY.SKILL.STEALTH`;
+                Name    :  `Stealth`;
+            }
+            
+            export const STEALTH : Stealth = {
+                _       :  `SRD.ABILITY.SKILL.STEALTH`,
+                Name    :  `Stealth`,
+                Ability :  DEXTERITY,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Stealth_Skill"})]
+            };
+
+            export interface Arcana extends S.Ability.Skill<Ability.Intelligence> {
+                _       :  `SRD.ABILITY.SKILL.ARCANA`;
+                Name    :  `Arcana`;
+            }
+            
+            export const ARCANA : Arcana = {
+                _       :  `SRD.ABILITY.SKILL.ARCANA`,
+                Name    :  `Arcana`,
+                Ability :  INTELLIGENCE,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Arcana_Skill"})]
+            };
+        
+            export interface History extends S.Ability.Skill<Ability.Intelligence> {
+                _       :  `SRD.ABILITY.SKILL.HISTORY`;
+                Name    :  `History`;
+            }
+            
+            export const HISTORY : History = {
+                _       :  `SRD.ABILITY.SKILL.HISTORY`,
+                Name    :  `History`,
+                Ability :  INTELLIGENCE,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:History_Skill"})]
+            };
+
+            export interface Investigation extends S.Ability.Skill<Ability.Intelligence> {
+                _       :  `SRD.ABILITY.SKILL.INVESTIGATION`;
+                Name    :  `Investigation`;
+            }
+            
+            export const INVESTIGATION : Investigation = {
+                _       :  `SRD.ABILITY.SKILL.INVESTIGATION`,
+                Name    :  `Investigation`,
+                Ability :  INTELLIGENCE,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Investigation_Skill"})]
+            };
+        
+            export interface Nature extends S.Ability.Skill<Ability.Intelligence> {
+                _       :  `SRD.ABILITY.SKILL.NATURE`;
+                Name    :  `Nature`;
+            }
+            
+            export const NATURE : Nature = {
+                _       :  `SRD.ABILITY.SKILL.NATURE`,
+                Name    :  `Nature`,
+                Ability :  INTELLIGENCE,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Nature_Skill"})]
+            };
+
+            export interface Religion extends S.Ability.Skill<Ability.Intelligence> {
+                _       :  `SRD.ABILITY.SKILL.RELIGION`;
+                Name    :  `Religion`;
+            }
+            
+            export const RELIGION : Religion = {
+                _       :  `SRD.ABILITY.SKILL.RELIGION`,
+                Name    :  `Religion`,
+                Ability :  INTELLIGENCE,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Religion_Skill"})]
+            };
+
+            export interface AnimalHandling extends S.Ability.Skill<Ability.Wisdom> {
+                _       :  `SRD.ABILITY.SKILL.ANIMAL_HANDLING`;
+                Name    :  `Animal Handling`;
+            }
+            
+            export const ANIMAL_HANDLING : AnimalHandling = {
+                _       :  `SRD.ABILITY.SKILL.ANIMAL_HANDLING`,
+                Name    :  `Animal Handling`,
+                Ability :  WISDOM,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Animal_Handling_Skill"})]
+            };
+
+            export interface Insight extends S.Ability.Skill<Ability.Wisdom> {
+                _       :  `SRD.ABILITY.SKILL.INSIGHT`;
+                Name    :  `Insight`;
+            }
+            
+            export const INSIGHT : Insight = {
+                _       :  `SRD.ABILITY.SKILL.INSIGHT`,
+                Name    :  `Insight`,
+                Ability :  WISDOM,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Insight_Skill"})]
+            };
+
+            export interface Medicine extends S.Ability.Skill<Ability.Wisdom> {
+                _       :  `SRD.ABILITY.SKILL.MEDICINE`;
+                Name    :  `Medicine`;
+            }
+            
+            export const MEDICINE : Medicine = {
+                _       :  `SRD.ABILITY.SKILL.MEDICINE`,
+                Name    :  `Medicine`,
+                Ability :  WISDOM,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Medicine_Skill"})]
+            };
+
+            export interface Perception extends S.Ability.Skill<Ability.Wisdom> {
+                _       :  `SRD.ABILITY.SKILL.PERCEPTION`;
+                Name    :  `Perception`;
+            }
+            
+            export const PERCEPTION : Perception = {
+                _       :  `SRD.ABILITY.SKILL.PERCEPTION`,
+                Name    :  `Perception`,
+                Ability :  WISDOM,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Perception_Skill"})]
+            };
+
+            export interface Survival extends S.Ability.Skill<Ability.Wisdom> {
+                _       :  `SRD.ABILITY.SKILL.SURVIVAL`;
+                Name    :  `Survival`;
+            }
+            
+            export const SURVIVAL : Survival = {
+                _       :  `SRD.ABILITY.SKILL.SURVIVAL`,
+                Name    :  `Survival`,
+                Ability :  WISDOM,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Survival_Skill"})]
+            };
+
+            export interface Deception extends S.Ability.Skill<Ability.Charisma> {
+                _       :  `SRD.ABILITY.SKILL.DECEPTION`;
+                Name    :  `Deception`;
+            }
+            
+            export const DECEPTION : Deception = {
+                _       :  `SRD.ABILITY.SKILL.DECEPTION`,
+                Name    :  `Deception`,
+                Ability :  CHARISMA,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Deception_Skill"})]
+            };
+
+            export interface Intimidation extends S.Ability.Skill<Ability.Charisma> {
+                _       :  `SRD.ABILITY.SKILL.INTIMIDATION`;
+                Name    :  `Intimidation`;
+            }
+            
+            export const INTIMIDATION : Intimidation = {
+                _       :  `SRD.ABILITY.SKILL.INTIMIDATION`,
+                Name    :  `Intimidation`,
+                Ability :  CHARISMA,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Intimidation_Skill"})]
+            };
+
+            export interface Performance extends S.Ability.Skill<Ability.Charisma> {
+                _       :  `SRD.ABILITY.SKILL.PERFORMANCE`;
+                Name    :  `Performance`;
+            }
+            
+            export const PERFORMANCE : Performance = {
+                _       :  `SRD.ABILITY.SKILL.PERFORMANCE`,
+                Name    :  `Performance`,
+                Ability :  CHARISMA,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Performance_Skill"})]
+            };
+
+            export interface Persuasion extends S.Ability.Skill<Ability.Charisma> {
+                _       :  `SRD.ABILITY.SKILL.PERSUASION`;
+                Name    :  `Persuasion`;
+            }
+            
+            export const PERSUASION : Persuasion = {
+                _       :  `SRD.ABILITY.SKILL.PERSUASION`,
+                Name    :  `Persuasion`,
+                Ability :  CHARISMA,
+                References :[Reference.WEBSITE({ URL : "https://www.dandwiki.com/wiki/5e_SRD:Persuasion_Skill"})]
+            };
         }
+
+        /**
+         * @param DC Difficulty Class for this check.
+         * @param Property Desired skill or ability.
+         * Makes a check object for a desired ability/skill.
+         */
+        export const Check = <A extends S.Ability>(DC : number, Property : A | S.Ability.Skill<A>) : S.Ability.Check<A> => ({
+            _ : "SRD.ABILITY.CHECK",
+            Property,
+            DC,
+        });
+
+        /**
+         * @param DC Difficulty Class for this save.
+         * @param Ability Desired ability.
+         * Makes a saving throw object for a desired ability.
+         */
+        export const Save  = <A extends S.Ability>(DC : number, Ability : A) : S.Ability.Save<A> => ({
+            _ : "SRD.ABILITY.SAVE",
+            Ability,
+            DC
+        });
     }
 }
 

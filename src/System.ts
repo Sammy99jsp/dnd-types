@@ -111,9 +111,11 @@ export namespace System {
 
     export namespace Ability {
 
-        export interface Skill extends _ {
+        export interface Skill<A extends Ability> extends _ {
             _       :   `SRD.ABILITY.SKILL.${string}`;
+            Ability :   A;
             Name    :   string;
+            References?:Reference[];
         }
 
         export namespace Skill {
@@ -136,6 +138,12 @@ export namespace System {
 
             export namespace Proficiency {
                 export type $ = Proficiency["_"];
+            }
+
+            export interface $<A extends Ability> extends _ {
+                _: `SRD.ABILITY.SKILL.${string}.$`;
+                Ability : A["_"];
+                Name    : string;
             }
         }  
 
@@ -183,7 +191,6 @@ export namespace System {
             Ability : A;
         }
 
-
         export namespace DifficultyClass {
             export interface $<A extends Ability> extends _ {
                 _   : `SRD.ABILITY.DIFFICULTY_CLASS.$`;
@@ -195,6 +202,19 @@ export namespace System {
             }
         }
 
+        // TODO: Has dis/advantage ??
+        export interface Check<A extends Ability> extends _ {
+            _        : "SRD.ABILITY.CHECK"
+            Property : A | Skill<A>;
+            Passive ?: boolean;
+            DC       : int;
+        }
+
+        export interface Save<A extends Ability> extends _ {
+            _       : "SRD.ABILITY.SAVE"
+            Ability : A;
+            DC      : int;
+        }
         
     }
 
