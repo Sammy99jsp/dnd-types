@@ -4,6 +4,7 @@
     "target": "ES2015",
     "strict": true,
     "sourceMap": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "experimentalDecorators": true
   }
 }

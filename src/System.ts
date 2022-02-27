@@ -1,8 +1,17 @@
 /**
+ * @decorator Shows
+ */
+function Computed() {}
+
+/**
  * A namespaced ID for most objects.
  */
-interface _ {
+export interface _ {
     _: string
+}
+
+export namespace _ {
+    export type Index<A extends _, B> = Record<A["_"], B>;
 }
 
 /**
@@ -21,7 +30,6 @@ export type int = number;
 export type ID = `${string}-${string}-4${string}-${string}-${string}`; // UUID v4
 
 export namespace Utils {
-    
     export interface Unit {
         _          : `UTILS.UNIT.${string}`;
     
@@ -64,6 +72,8 @@ export namespace Utils {
         Unit : U,
         Value: V,
     }
+
+    
 }
 
 /**
@@ -91,15 +101,47 @@ export namespace Reference {
         URL          : string;
     }
 
+    export interface Text extends Reference {
+        _            : "UTILS.REFERENCE.TEXT";
+
+        Content      : string;
+    }
+
     
     export const WEBSITE = ({PageTitle, WebsiteTitle, URL} : {PageTitle?:string; WebsiteTitle?: string; URL: string;}) : Website =>
             ({_: "UTILS.REFERENCE.WEBSITE", PageTitle, WebsiteTitle, URL});
 
     export const BOOK = ({Title, Section, Page} : {Title :string; Section?: string; Page?: int;}) : Book =>
             ({_: "UTILS.REFERENCE.BOOK", Title, Section, Page});
+        
+    export const TEXT = (Content : string) : Text => ({_: "UTILS.REFERENCE.TEXT", Content});
 }
 
 export namespace System {
+
+
+    export interface Movement extends _ {
+        _   : `SRD.MOVEMENT.${string}`;
+        Name: string;
+
+        References ?: Reference[];
+    }
+
+    export namespace Movement {
+
+    }
+    
+
+    export interface Size extends _ {
+        _   : `SRD.SIZE.${string}`;
+        Name: string;
+
+        
+
+        References?: Reference[];
+    }
+    
+
     export interface Ability extends _ {
         _: `SRD.ABILITY.${string}`;
 
@@ -107,6 +149,8 @@ export namespace System {
         Short       : string;
 
         References ?: Reference[];
+        [Symbol.toPrimitive] : (this: Ability, hint : "string" | "number" | "default") => string | number; 
+        toString : (this : Ability) => string;
     }
 
     export namespace Ability {
@@ -173,8 +217,8 @@ export namespace System {
             }
         }
 
-        export interface AbilityScore<A extends Ability> {
-            Ability : A;
+        export interface AbilityScore<A extends Ability, S extends Skill<A>> {
+            Property: A | S;
             Score   : Score;
         }
 
@@ -203,35 +247,243 @@ export namespace System {
         }
 
         // TODO: Has dis/advantage ??
+          
         export interface Check<A extends Ability> extends _ {
             _        : "SRD.ABILITY.CHECK"
             Property : A | Skill<A>;
             Passive ?: boolean;
-            DC       : int;
+            DC      ?: int;
+        }
+
+        export namespace Check {
+            export interface Result<A extends Ability> {
+                Property : A | Skill<A>;
+
+                /**
+                 * Raw + All modifiers.
+                 */
+                Value    : int;
+
+                Raw     : int;
+                Modifiers : Modifier[];
+                Pass   ?: boolean;
+            }
+
+            /**
+             * TODO: Refactor the source bit.
+             */
+            export interface Modifier {
+                Value : int;
+                Source: Reference[]
+            }
         }
 
         export interface Save<A extends Ability> extends _ {
             _       : "SRD.ABILITY.SAVE"
             Ability : A;
-            DC      : int;
+            DC     ?: int;
+        }
+
+        export namespace Save {
+            export interface Result<A extends Ability> {
+                Save : Save<A>;
+
+                /**
+                 * Raw + All modifiers.
+                 */
+                Value    : int;
+
+                Raw     : int;
+                Modifiers : Modifier[];
+                Pass   ?: boolean;
+
+                Critical ?: "SUCCESS" | "FAILURE"
+            }
+
+            /**
+             * TODO: Refactor the source bit.
+             */
+            export interface Modifier {
+                Value : int;
+                Source: Reference[]
+            }
         }
         
+        
+    }
+
+    export interface Feature<S extends Feature.Source<_>> extends _ {
+        _  : `SRD.FEATURE.${string}`;
+
+        /**
+         * The name of the specific feature.
+         */
+        Name: string,
+
+        /**
+         * The source of this Feature (e.g. Racial Trait, Class, Magical Item, Spell, etc.)
+         */
+        Source : S;
+
+        /**
+         * A desccription of this feature.
+         */
+        Description ?: string;
+
+        /**
+         * Callback when first loaded.
+         */
+        Init : (this : Entity, Source: S, Parameters : Record<string, any>) => void;
+
+        References ?: Reference[];
+    }
+
+    export namespace Feature {
+        export interface Source<S extends _> {
+            Name : string;
+            SourceID : S["_"];
+        }
+    }
+
+    
+
+    /**
+     * See [wiki](https://www.dandwiki.com/wiki/5e_SRD:About_Races)
+     */
+
+    export interface Race extends _ {
+        _       : `SRD.RACE.${string}`;
+
+        Name    : string;
+
+        Parent ?: Race['_'];
+
+        Details : Race.Details;
+
+        Features: Feature<Race.RacialFeature>[];
+
+        References: Reference[]; 
+    }
+
+    export namespace Race {
+
+        /// Acts as storage for various choices the player may have to make
+        ///     when creating their character.
+        export interface Store {
+            Choices : Record<string, any>;
+        }
+
+        export interface RacialFeature extends Feature.Source<Race> {
+            Name : "Race";
+        }
+
+        export interface Details extends _ {
+            _       : `SRD.RACE.DETAILS`;
+            Age     : Details.Age;
+
+            /**
+             * TODO: Add this!
+             */
+            Alignment : unknown;
+
+            Size      : Size;
+
+
+        }
+
+        export namespace Details {
+            export interface Description {
+                Description ?: string;
+            }
+            /**
+             * Contains age details of a race. See [Wiki](https://www.dandwiki.com/wiki/5e_SRD:About_Races#Age)
+             */
+            export interface Age extends Description {
+                Adult    : int;
+                Lifespan : int;
+    
+                Description ?: string;
+            }
+
+            export interface Size<S extends System.Size> extends Description {
+                Size : S;
+                Description ?: string;
+            }
+        }
     }
 
     export interface Entity extends _ {
         _       : "SRD.ENTITY";
         
-        ID      : ID;
         Name    : string;
 
-        Race    : unknown;
+        Race    : Race;
         Class   : unknown[];
+
+        /**
+         * The entity's stat block.
+         */
+        Stats   : Entity.StatBlock;
+        
+        /**
+         * @computed This will be calculated from Entity.Features[].
+         **/ 
+        // Speed   : Entity.SpeedBlock;
+
+        /**
+         * @computed
+         */
+        Actions : Combat.Action[];
+
+        Features: [];
+
+        Inventory: Entity.Inventory;
+
+
+        //// FUNCTIONS — these all have 'this' as the entity itself — OOP FTW !
+
+
+
+        /**
+         * Make a check.
+         */
+        Check<A extends Ability>(this: Entity, Check : Ability.Check<A>) : Promise<Ability.Check.Result<A>>;
+        /// TODO: Add a proper return type here which can provide an appropriate response.
+
+        /**
+         * Make a save.
+         */
+        Save<A extends Ability>(this : Entity, Save : Ability.Save<A>) : Promise<Ability.Save.Result<A>>;
+        /// TODO: Add a proper return type here which can provide an appropriate response.
 
 
     }
 
     export namespace Entity {
+        export interface Inventory extends _ {
+            _       : `SRD.ENTITY.INVENTORY`
+            /**
+             * @computed The combined weight of all the items in the entity's inventory.
+             */
+            Weight  : number; 
 
+            /// TODO: Add item type.
+            Items   : unknown[];
+
+            /// TODO: Currency
+            Currencies: Utils.UnitValue<Utils.Unit.Currency, number>[];
+
+        }
+
+        export interface StatBlock {
+            Abilities<A extends System.Ability>(Ability: A) : System.Ability.AbilityScore<A, never>;
+            Skills<A extends System.Ability, S extends System.Ability.Skill<A>>(Skill: S) : Ability.AbilityScore<A, S> | Ability.AbilityScore<A, never>;
+            SavingThrows<A extends System.Ability>(Ability: A) : System.Ability.AbilityScore<A, never>;
+        }
+
+        export namespace Stats {
+            
+        }
     }
 
     /**
@@ -343,5 +595,49 @@ export namespace System {
 
             References ?:   Reference[];
         }
+    }
+
+    export interface Combat {
+        Round      : int;
+        /**
+         * Whose turn is it in Combat.Order ?
+         */
+        Turn       : int;
+        
+        Initiative : Combat.Member<Entity>[];
+
+        /**
+         * @computed Should be implemented as a getter.
+         */
+        Order      : Entity[];
+    }
+
+    export namespace Combat {
+        export interface Member<E extends Entity> {
+            Initiative : int;
+            Entity     : E;
+        }
+
+        export interface Action extends _ {
+            _        : `SRD.ACTION.${string}`;
+
+            Name     :  string;
+            Type     :  Action.Type;
+
+            Duration :  Action.Duration;
+        }
+
+        export namespace Action {
+            export type Type = `SRD.ACTION.ATTACK` | `SRD.ACTION.OTHER`;
+
+            /**
+             * TODO: Merge with {@link Spell.Duration}
+             */
+            export interface Duration {
+                _       :   `SRD.COMBAT.DURATION.${string}`;
+                Name    :   string;
+            }
+        }
+
     }
 }

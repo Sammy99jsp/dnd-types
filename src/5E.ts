@@ -1,4 +1,4 @@
-import { System as S, Reference, Utils } from "./System";
+import { System as S, Reference, Utils, int } from "./System";
 
 /**
  * Actual 5E SRD content
@@ -116,7 +116,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.COMPONENT.VERBAL",
                 Initial: "V",
                 Name: "Verbal",
-                References: [Reference.WEBSITE({URL : "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Verbal_.28V.29"})],
+                References: [Reference.WEBSITE({URL : "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#verbal"})],
                 Extra
             });
 
@@ -135,7 +135,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.COMPONENT.SOMANTIC",
                 Initial: "S",
                 Name: "Somantic",
-                References: [Reference.WEBSITE({URL : "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Somatic_.28S.29"})],
+                References: [Reference.WEBSITE({URL : "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#somatic"})],
                 Extra
             });
 
@@ -154,7 +154,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.COMPONENT.MATERIAL",
                 Initial: "M",
                 Name: "Material",
-                References: [Reference.WEBSITE({URL : "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Material_.28M.29"})],
+                References: [Reference.WEBSITE({URL : "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#material"})],
                 Extra
             });
         }
@@ -164,7 +164,7 @@ export namespace DND_5E {
             
             /**
              * Spells that are immeadiately cast:
-             * [Wiki](https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous)
+             * [Wiki](https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#instantaneous)
              */
             export interface Instantaneous extends S.Spell.Duration {
                 _           : "SRD.SPELL.DURATION.INSTANTANEOUS",
@@ -173,7 +173,7 @@ export namespace DND_5E {
 
             export const INSTANTANEOUS: () => Instantaneous = () => ({
                 _           : "SRD.SPELL.DURATION.INSTANTANEOUS",
-                References  : [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous"})],
+                References  : [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#instantaneous"})],
             });
 
             /// Concentration
@@ -189,7 +189,7 @@ export namespace DND_5E {
              */
             export const CONCENTRATION : <U extends Utils.Unit, V extends string | number>(MaxDuration : Utils.UnitValue<U, V>) => Concentration = (MaxDuration) => ({
                 _           : "SRD.SPELL.DURATION.CONCENTRATION",
-                References : [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Concentration"})],
+                References : [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#concentration"})],
                 MaxDuration,
             });
 
@@ -202,7 +202,7 @@ export namespace DND_5E {
 
             export const ACTION : () => Action = () => ({
                 _           :  "SRD.SPELL.DURATION.ACTION",
-                References  :  [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Casting_Time"})]
+                References  :  [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#castingTime"})]
             });
 
             /// Bonus Action
@@ -214,7 +214,7 @@ export namespace DND_5E {
 
             export const BONUS_ACTION: () => BonusAction = () => ({
                 _           : "SRD.SPELL.DURATION.BONUS_ACTION",
-                References  : [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Bonus_Action"})],
+                References  : [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#bonusAction"})],
             });
 
             /// Reaction
@@ -226,7 +226,7 @@ export namespace DND_5E {
 
             export const REACTION: () => Reaction = () => ({
                 _: "SRD.SPELL.DURATION.REACTION",
-                References  : [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Reactions"})]
+                References  : [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#reactions"})]
             });
 
             // Flat (Static) amount Time
@@ -241,7 +241,7 @@ export namespace DND_5E {
 
             export const STATIC : ({Duration} : {Duration : Utils.UnitValue<Utils.Unit.Time, number | string>}) => Static = ({Duration}) => ({
                 _: "SRD.SPELL.DURATION.STATIC",
-                References : [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Duration"})],
+                References : [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#duration"})],
                 Duration,
             })  
         }
@@ -250,47 +250,47 @@ export namespace DND_5E {
             export const ABJURATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.ABJURATION",
                 Name : "Abjuration",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Abjuration_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const CONJURATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.CONJURATION",
                 Name : "Conjuration",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Conjuration_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const DIVINATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.DIVINATION",
                 Name : "Divination",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Divination_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const ENCHANTMENT : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.ENCHANTMENT",
                 Name : "Enchantment",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Enchantment_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const EVOCATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.EVOCATION",
                 Name : "Evocation",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Evocation_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const ILLUSION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.ILLUSION",
                 Name : "Illusion",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Illusion_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const NECROMANCY : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.NECROMANCY",
                 Name : "Necromancy",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Necromancy_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const TRANSMUTATION : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.TRANSMUTATION",
                 Name : "Transmutation",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Transmutation_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
             export const UNIVERSAL : S.Spell.School = {
                 _: "SRD.SPELL.SCHOOL.UNIVERSAL",
                 Name : "Universal",
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/SRD:Universal_School"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#theSchoolsOfMagic"})]
             };
         }
 
@@ -306,7 +306,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.AREA.CONE",
                 Name: "Cone",
                 Size,
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Cone"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#cone"})]
             });
                 
             export interface Cube {
@@ -320,7 +320,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.AREA.CUBE",
                 Name: "Cube",
                 Size,
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Cube"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#cube"})]
             });
 
             export interface Cylinder {
@@ -334,7 +334,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.AREA.CYLINDER",
                 Name: "Cylinder",
                 Size,
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Cylinder"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#cylinder"})]
             });
 
             export interface Line {
@@ -348,7 +348,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.AREA.LINE",
                 Name: "Line",
                 Size,
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Line"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#line"})]
             });
 
             export interface Sphere {
@@ -362,7 +362,7 @@ export namespace DND_5E {
                 _: "SRD.SPELL.AREA.SPHERE",
                 Name: "Sphere",
                 Size,
-                References: [Reference.WEBSITE({URL: "https://www.dandwiki.com/wiki/5e_SRD:Casting_a_Spell#Instantaneous#Sphere"})]
+                References: [Reference.WEBSITE({URL: "https://5e.d20srd.org/srd/spellcasting/castingASpell.htm#sphere"})]
             })
         }
 
@@ -456,94 +456,101 @@ export namespace DND_5E {
     }
 
     export namespace Ability {
-        export interface Strength extends S.Ability {
-            _       : "SRD.ABILITY.STRENGTH";
-            Name    : "Strength";
-            Short   : "STR";
-            References : Reference[];
+        function Factory<A extends S.Ability>(Ability : Proto<A>) : A {
+            return {
+                ...Ability,
+                [Symbol.toPrimitive](hint) {
+                    switch(hint) {
+                        case "string":
+                            return Ability._;
+                        case "number":
+                            return NaN;
+                        default:
+                            return Ability._;
+                    }
+                },
+                toString() {
+                    return Ability._;
+                }
+            } as A;
         }
 
-        export const STRENGTH : Strength = {
-            _: "SRD.ABILITY.STRENGTH",
-            Name: "Strength",
-            Short: "STR",
-            References: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Strength"})]
-        }; 
-
-        export interface Dexterity extends S.Ability {
-            _       : "SRD.ABILITY.DEXTERITY";
-            Name    : "Dexterity";
-            Short   : "DEX";
-            References : Reference[];
+        interface ProtoAbility {
+            _ : S.Ability["_"];
+            Name : string;
+            Short : string;
+            References ?: Reference[];
         }
 
-        export const DEXTERITY : Dexterity = {
+        interface Proto<A extends S.Ability> extends ProtoAbility {
+            _ : A["_"];
+            Name: A["Name"];
+            Short : A["Short"];
+        }
+
+        export interface TypeFactory<A extends ProtoAbility> extends S.Ability {
+            _     : A["_"];
+            Name  : A["Name"];
+            Short : A["Short"];
+            [Symbol.toPrimitive] : (this: S.Ability, hint : "string" | "number" | "default") => A["_"] | number;
+        }
+
+        export interface Strength extends TypeFactory<{ _: "SRD.ABILITY.STRENGTH", Name : "Strength", Short :"STR"}> {};
+
+        export const STRENGTH : Strength = Factory<Strength>({
+            _ : "SRD.ABILITY.STRENGTH", Name : "Strength", Short: "STR",
+            References: [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/skills/usingEachAbility.htm#strength"})],
+        });
+
+        export interface Dexterity extends TypeFactory<{ _: "SRD.ABILITY.DEXTERITY", Name : "Dexterity", Short :"DEX"}> {};
+
+        export const DEXTERITY : Dexterity = Factory<Dexterity>({
             _       : "SRD.ABILITY.DEXTERITY",
             Name    : "Dexterity",
             Short   : "DEX",
-            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Dexterity" })]
-        }; 
+            References : [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/skills/usingEachAbility.htm#dexterity" })]
+        }); 
 
-        export interface Constitution extends S.Ability {
-            _       : "SRD.ABILITY.CONSTITUTION";
-            Name    : "Constitution";
-            Short   : "CON";
-            References : Reference[];
-        }
+        export interface Constitution extends TypeFactory<{ _: "SRD.ABILITY.CONSTITUTION", Name : "Constitution", Short :"CON"}> {};
 
-        export const CONSTITUTION : Constitution = {
+        export const CONSTITUTION : Constitution = Factory<Constitution>({
             _       : "SRD.ABILITY.CONSTITUTION",
             Name    : "Constitution",
             Short   : "CON",
-            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Constitution" })]
-        }; 
+            References : [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/skills/usingEachAbility.htm#constitution" })]
+        }); 
 
-        export interface Intelligence extends S.Ability {
-            _       : "SRD.ABILITY.INTELLIGENCE";
-            Name    : "Intelligence";
-            Short   : "INT";
-            References : Reference[];
-        }
+        export interface Intelligence extends TypeFactory<{ _: "SRD.ABILITY.INTELLIGENCE", Name : "Intelligence", Short :"INT"}> {};
 
-        export const INTELLIGENCE : Intelligence = {
+        export const INTELLIGENCE : Intelligence = Factory<Intelligence>({
             _       : "SRD.ABILITY.INTELLIGENCE",
             Name    : "Intelligence",
             Short   : "INT",
-            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Intelligence"})]
-        }; 
+            References : [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/skills/usingEachAbility.htm#intelligence"})]
+        }); 
 
-        export interface Wisdom extends S.Ability {
-            _       : "SRD.ABILITY.WISDOM";
-            Name    : "Wisdom";
-            Short   : "WIS";
-            References : Reference[];
-        }
+        export interface Wisdom extends TypeFactory<{ _: "SRD.ABILITY.WISDOM", Name : "Wisdom", Short :"WIS"}> {};
 
-        export const WISDOM : Wisdom = {
+        export const WISDOM : Wisdom = Factory<Wisdom>({
             _       : "SRD.ABILITY.WISDOM",
             Name    : "Wisdom",
             Short   : "WIS",
-            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Wisdom"})]
-        }; 
+            References : [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/skills/usingEachAbility.htm#wisdom"})]
+        }); 
 
-        export interface Charisma extends S.Ability {
-            _       : "SRD.ABILITY.CHARISMA";
-            Name    : "Charisma";
-            Short   : "CHA";
-            References : Reference[];
-        }
+        export interface Charisma extends TypeFactory<{ _: "SRD.ABILITY.CHARISMA", Name : "Charisma", Short :"CHA"}> {};
 
-        export const CHARISMA : Charisma = {
+        export const CHARISMA : Charisma = Factory<Charisma>({
             _       : "SRD.ABILITY.CHARISMA",
             Name    : "Charisma",
             Short   : "CHA",
-            References : [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Charisma" })]
-        }; 
+            References : [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/skills/usingEachAbility.htm#charisma" })]
+        }); 
 
         
         export namespace Score {
             const MakeScore = <A extends S.Ability>(Ability: A) => (
-                (Score : S.Ability.Score) => ({Ability, Score})
+                (Score : S.Ability.Score) => ({Property : Ability, Score})
             );
     
             export const STR = MakeScore(STRENGTH);
@@ -575,7 +582,7 @@ export namespace DND_5E {
                     Action: function(ProficienyBonus) {
                         return Math.floor(ProficienyBonus / 2);
                     },
-                    Reference: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/Jack_of_All_Trades_(5e_Feat)" })]
+                    Reference: [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/classes/bard.htm#inspireCompetence" })]
                 }
 
                 export const PROFICIENT: S.Ability.Skill.Proficiency = {
@@ -584,7 +591,7 @@ export namespace DND_5E {
                     Action: function(ProficiencyBonus) {
                         return Math.floor(ProficiencyBonus);
                     },
-                    Reference: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Proficiency_Bonus" })]
+                    Reference: [Reference.WEBSITE({ URL: "https://5e.d20srd.org/srd/usingAbilityScores.htm#proficiencyBonus" })]
                 }
 
                 export const EXPERTISE: S.Ability.Skill.Proficiency = {
@@ -593,7 +600,7 @@ export namespace DND_5E {
                     Action: function(ProficiencyBonus) {
                         return Math.floor(ProficiencyBonus * 2);
                     },
-                    Reference: [Reference.WEBSITE({ URL: "https://www.dandwiki.com/wiki/5e_SRD:Rogue#Expertise" })]
+                    Reference: [Reference.WEBSITE({ URL: "http://5e.d20srd.org/srd/classes/rogue.htm" })]
                 }
             }
 
@@ -815,26 +822,40 @@ export namespace DND_5E {
         }
 
         /**
-         * @param DC Difficulty Class for this check.
+         * @param DC Difficulty Class for this Check.
          * @param Property Desired skill or ability.
          * Makes a check object for a desired ability/skill.
          */
-        export const Check = <A extends S.Ability>(DC : number, Property : A | S.Ability.Skill<A>) : S.Ability.Check<A> => ({
-            _ : "SRD.ABILITY.CHECK",
-            Property,
-            DC,
-        });
+        export function Check <A extends S.Ability>(Property : A | S.Ability.Skill<A>, Options?: { DC?: int, Passive?: boolean } ) : S.Ability.Check<A> {
+            return {
+                _ : "SRD.ABILITY.CHECK",
+                Property,
+                ...(Options ? Options : {}),
+            }
+        };
 
         /**
          * @param DC Difficulty Class for this save.
          * @param Ability Desired ability.
          * Makes a saving throw object for a desired ability.
          */
-        export const Save  = <A extends S.Ability>(DC : number, Ability : A) : S.Ability.Save<A> => ({
-            _ : "SRD.ABILITY.SAVE",
-            Ability,
-            DC
-        });
+        export function Save <A extends S.Ability>(Ability : A, Options ?:  {DC?: number}) : S.Ability.Save<A> {
+            return {
+                _ : "SRD.ABILITY.SAVE",
+                Ability,
+                ...(Options?.DC ? {DC : Options.DC} : {}),
+            }
+        };
     }
+
+    export namespace Entity {
+        export namespace Size {
+            export const TINY : S.Size = {
+                _   : "SRD.SIZE.TINY",
+                Name: "Tiny",
+            };
+        }
+    }
+    
 }
 
