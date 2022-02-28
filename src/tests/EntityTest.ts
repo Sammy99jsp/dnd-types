@@ -2,24 +2,38 @@ import { Reference, System as S, Utils, _ } from "../System";
 import { DND_5E as D } from "../5E";
 
 
+const   STR = D.Ability.STRENGTH,
+        DEX = D.Ability.DEXTERITY,
+        CON = D.Ability.CONSTITUTION,
+        INT = D.Ability.INTELLIGENCE,
+        WIS = D.Ability.WISDOM,
+        CHA = D.Ability.CHARISMA;
 
 
+
+type InlineMod = number | { Modifier : number, Raw ?: number };
 
 interface EntityGenParams {
     Name  : string
     Stats : {
-        Abilities : _.Index<S.Ability, S.Ability.AbilityScore<S.Ability, never>>;
-        Skills    : _.Index<
-                        S.Ability.Skill<S.Ability>,
-                        S.Ability.AbilityScore<S.Ability, S.Ability.Skill<S.Ability>>
-                    >;
+        Abilities : _.Index<S.Ability, InlineMod>;
+        Skills    : _.Index<S.Ability.Skill<S.Ability>, InlineMod>;
 
-        SavingThrows : _.Index<S.Ability, S.Ability.AbilityScore<S.Ability, never>>;
+        SavingThrows : _.Index<S.Ability, InlineMod>;
     }
     Race : S.Race;
     // Class ?: S.Class;
-
 }
+
+function InlineToMod<A extends S.Ability, S extends S.Ability.Skill<A>>(Ability : A | S, Data : InlineMod) : S.Ability.AbilityScore<A, S> {
+    if(typeof Data === "number") {
+        /// Raw score.
+        return D.Ability.Score.$<A, S>(Ability)(D.Ability.Score.Raw(Data));
+    } else {
+        return D.Ability.Score.$<A, S>(Ability)({...D.Ability.Score.Modifier(Data.Modifier), ...(Data.Raw ? {Raw : Data.Raw} : {})});
+    }
+}
+
 function entityGenerator(
     Data : EntityGenParams
 ) : S.Entity {
@@ -33,13 +47,16 @@ function entityGenerator(
         Features: [],
         Stats : {
             Abilities : function<A extends S.Ability>(Ability : A) {
-                return Data.Stats.Abilities[Ability._] as S.Ability.AbilityScore<A, never>;
+                return InlineToMod(Ability, Data.Stats.Abilities[Ability._]) as S.Ability.AbilityScore<A, never>;
             },
             Skills : function<A extends S.Ability, S extends S.Ability.Skill<A>>(Skill : S) {
-                return (Data.Stats.Skills[Skill._] ?? Data.Stats.Abilities[Skill.Ability._]) as S.Ability.AbilityScore<A, S> | S.Ability.AbilityScore<A, never>;
+                return (Data.Stats.Skills[Skill._] ? InlineToMod(Skill, Data.Stats.Skills[Skill._]) 
+                                                    : InlineToMod(Skill, Data.Stats.Abilities[Skill.Ability._])) as S.Ability.AbilityScore<A, S> | S.Ability.AbilityScore<A, never>;
             },
             SavingThrows : function<A extends S.Ability>(Ability : A) {
-                return (Data.Stats.SavingThrows[Ability._] ?? Data.Stats.Abilities[Ability._]) as S.Ability.AbilityScore<A, never>;
+                return (Data.Stats.SavingThrows[Ability._] ?
+                        InlineToMod(Ability, Data.Stats.SavingThrows[Ability._])
+                        : InlineToMod(Ability, Data.Stats.Abilities[Ability._])) as S.Ability.AbilityScore<A, never>;
             },
         },
         async Check(Check) {
@@ -92,39 +109,38 @@ function entityGenerator(
 }
 const RAW = D.Ability.Score.Raw;
 
-const   STR = D.Ability.STRENGTH,
-        DEX = D.Ability.DEXTERITY,
-        CON = D.Ability.CONSTITUTION,
-        INT = D.Ability.INTELLIGENCE,
-        WIS = D.Ability.WISDOM,
-        CHA = D.Ability.CHARISMA;
+
 
 const testEntity = entityGenerator({
     Name : "Knight",
     Race : undefined as unknown as S.Race,
     Stats: {
         Abilities: {
-            /// [STR] : D.Ability.Score.STR(...)
-            ///         Is able to be used in vanilla JS, but not TS (@_@)
+            [`${STR}`] : 16,
+            [`${DEX}`] : 11,
+            [`${CON}`] : 14,
+            [`${INT}`] : 11,
+            [`${WIS}`] : 11,
+            [`${CHA}`] : 15,
             
-            [`${STR}`]: D.Ability.Score.STR(RAW(16)),
-            [`${DEX}`]: D.Ability.Score.DEX(RAW(11)),
-            [`${CON}`]: D.Ability.Score.CON(RAW(14)),
-            [`${INT}`]: D.Ability.Score.INT(RAW(11)),
-            [`${WIS}`]: D.Ability.Score.WIS(RAW(11)),
-            [`${CHA}`]: D.Ability.Score.CHA(RAW(15)),
+            /// Or:
+            /// [STR] : 16
+            ///         Is able to be used in vanilla JS, but not TS (@_@)
         },
         SavingThrows: {
-            [`${CON}`]: D.Ability.Score.CON(RAW(18)),
-            [`${WIS}`]: D.Ability.Score.WIS(RAW(14)),
+            [`${CON}`] : { Modifier : +4 },
+            [`${WIS}`] : { Modifier : +2 },
         },
-        Skills: {}
-    }
+        Skills: {  },
+    },
 });
 
 // Make them do a check...
-
 const testCheck = D.Ability.Check(STR, { DC : 15 } );
 
-
 new Array(20).fill(0).forEach(() => testEntity.Check(testCheck).then(console.log));
+
+// Test 
+const testSave  = D.Ability.Save (CON, { DC : 15 } );
+
+new Array(20).fill(0).forEach(() => testEntity.Save(testSave).then(console.log));

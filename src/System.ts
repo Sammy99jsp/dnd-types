@@ -293,9 +293,9 @@ export namespace System {
                  */
                 Value    : int;
 
-                Raw     : int;
-                Modifiers : Modifier[];
-                Pass   ?: boolean;
+                Raw          : int;
+                Modifiers    : Modifier[];
+                Pass        ?: boolean;
 
                 Critical ?: "SUCCESS" | "FAILURE"
             }

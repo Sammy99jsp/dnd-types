@@ -549,16 +549,9 @@ export namespace DND_5E {
 
         
         export namespace Score {
-            const MakeScore = <A extends S.Ability>(Ability: A) => (
+            export const $ = <A extends S.Ability, S extends S.Ability.Skill<A>>(Ability: A | S) => (
                 (Score : S.Ability.Score) => ({Property : Ability, Score})
             );
-    
-            export const STR = MakeScore(STRENGTH);
-            export const DEX = MakeScore(DEXTERITY);
-            export const CON = MakeScore(CONSTITUTION);
-            export const INT = MakeScore(INTELLIGENCE);
-            export const WIS = MakeScore(WISDOM);
-            export const CHA = MakeScore(CHARISMA);
             
             export const CalculateModifier = (Score : number) => Math.floor((Score - 10) / 2);
             
@@ -566,6 +559,12 @@ export namespace DND_5E {
                 _: "SRD.ABILITY.SCORE",
                 Score: Raw,
                 Modifier : CalculateModifier(Raw), 
+            });
+
+            export const Modifier = (Modifier : number) : S.Ability.Score => ({
+                _       : "SRD.ABILITY.SCORE",
+                Score   : 10 + Modifier * 2,
+                Modifier: Modifier
             });
 
             // TODO: Make a complete proxy, using an entity's racial and class features which can effect the score/modifier.
