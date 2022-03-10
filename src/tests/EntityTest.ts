@@ -43,7 +43,12 @@ function entityGenerator(
         Race : Data.Race,
         Class: [],
         Actions: [],
-        Inventory : {_: "SRD.ENTITY.INVENTORY" , Currencies: [], Weight: 0, Items: []},
+        Inventory : {
+            _: "SRD.ENTITY.INVENTORY",
+            Currencies: [],
+            Weight: 0,
+            Items: []
+        },
         Features: [],
         Stats : {
             Abilities : function<A extends S.Ability>(Ability : A) {
@@ -51,7 +56,7 @@ function entityGenerator(
             },
             Skills : function<A extends S.Ability, S extends S.Ability.Skill<A>>(Skill : S) {
                 return (Data.Stats.Skills[Skill._] ? InlineToMod(Skill, Data.Stats.Skills[Skill._]) 
-                                                    : InlineToMod(Skill, Data.Stats.Abilities[Skill.Ability._])) as S.Ability.AbilityScore<A, S> | S.Ability.AbilityScore<A, never>;
+                                                   : InlineToMod(Skill, Data.Stats.Abilities[Skill.Ability._])) as S.Ability.AbilityScore<A, S> | S.Ability.AbilityScore<A, never>;
             },
             SavingThrows : function<A extends S.Ability>(Ability : A) {
                 return (Data.Stats.SavingThrows[Ability._] ?
@@ -131,7 +136,9 @@ const testEntity = entityGenerator({
             [`${CON}`] : { Modifier : +4 },
             [`${WIS}`] : { Modifier : +2 },
         },
-        Skills: {  },
+        Skills: { 
+            
+         },
     },
 });
 

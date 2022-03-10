@@ -153,6 +153,41 @@ export namespace System {
         toString : (this : Ability) => string;
     }
 
+    /**
+     * Possibly add interfaces for custom dice notation parsers
+     * 
+     * Also, the folowing is quite cool:
+     * 
+     * https://sophiehoulden.com/dice/documentation/notation.html
+     */
+
+    export interface Die extends _ {
+        _           : `SRD.DIE.${string}`;
+        Name        : string;
+
+        Min        ?: number;
+        Max         : number;
+        Multiplier ?: number;
+    }
+
+
+    export interface Dice extends _, Iterable<Die> {
+        _ : "SRD.DICE";
+
+        /**
+         * 
+         * Adds support for:
+         * 
+         * for await (const result of diceObj) {
+         *      Do something with each roll.
+         * }
+         */
+
+        [Symbol.asyncIterator]: IterableIterator<Dice>
+
+
+    }
+
     export namespace Ability {
 
         export interface Skill<A extends Ability> extends _ {
@@ -410,6 +445,28 @@ export namespace System {
                 Description ?: string;
             }
         }
+    }
+
+    /**
+     * An interface that contains the pure information about a class.
+     * 
+     * (Does not store any data of an implementation)
+     * 
+     */
+    export interface Class extends _ {
+        _           : `SRD.CLASS.${string}`;
+        Name        : string;
+
+        References ?: Reference[];
+
+        /**
+         * Calculates the 
+         */
+        HitDice     : (Level : number) => Dice[];
+    }
+
+    export namespace Class {
+
     }
 
     export interface Entity extends _ {
