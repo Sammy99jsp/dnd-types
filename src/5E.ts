@@ -855,6 +855,267 @@ export namespace DND_5E {
             };
         }
     }
-    
-}
+ 
+    export namespace Damage {
+        export type Factory<D extends Omit<S.Damage, "Source">> =
+            Omit<D, "Source">  & {<S extends S.Damage.Source<S.Damage.SourceType>>(Amount : number, Source ?: S) : S.Damage.Value<D, S>} 
 
+        /**
+         * Checks the type of damage.
+         * 
+         * @param Damage The damage to check.
+         * @param Type The type to check against.
+         * @returns Whether the damage is of that type. 
+         */
+        export function Is<D extends S.Damage, S extends S.Damage.Source<S.Damage.SourceType>, T extends S.Damage>
+            (Damage : S.Damage.Value<D, S> | Factory<D> | D, Type : Factory<T> | T) : boolean {
+                if(Damage._ === `SRD.DAMAGE.$VALUE`) {
+                    const tmp = Damage as S.Damage.Value<D, S>;
+
+                    /// Added macros (@) for quickly checking the source (i.e. non-magical or magical) of damage.
+                    if(Type._.search("@") > -1) {
+                        return tmp.Source._ === Type._;
+                    }
+                    
+                    return tmp.Type._ === Type._;
+                }
+                return (Damage as Factory<D> | D)._ === Type._;
+            }
+ 
+
+        function DamageFactory<D extends S.Damage>(Type : D) : Factory<D> {
+            return Object.assign(
+                <S extends S.Damage.Source<S.Damage.SourceType>>(Amount : number, Source ?: S) => (
+                    {_: `SRD.DAMAGE.$VALUE` as S.Damage.Value<D, S>["_"], Type, Amount, ...(Source ? {Source} : {Source: { _: S.Damage.SourceType.NON_MAGICAL, Details: null}})}
+                ),
+                {...Type},
+            ) as Factory<D>;
+        }
+
+        export const ACID = DamageFactory<{_ : `SRD.DAMAGE.ACID`, Name: `Acid`}>({
+            _: `SRD.DAMAGE.ACID`,
+            Name: `Acid`
+        });
+
+        export const BLUDGEONING = DamageFactory<{_ : `SRD.DAMAGE.BLUDGEONING`, Name: `Bludgeoning`}>({
+            _: `SRD.DAMAGE.BLUDGEONING`,
+            Name: `Bludgeoning`
+        });
+
+        export const COLD = DamageFactory<{_ : `SRD.DAMAGE.COLD`, Name: `Cold`}>({
+            _: `SRD.DAMAGE.COLD`,
+            Name: `Cold`
+        });
+
+        export const FIRE = DamageFactory<{_ : `SRD.DAMAGE.FIRE`, Name: `Fire`}>({
+            _: `SRD.DAMAGE.FIRE`,
+            Name: `Fire`
+        });
+
+        export const FORCE = DamageFactory<{_ : `SRD.DAMAGE.FORCE`, Name: `Force`}>({
+            _: `SRD.DAMAGE.FORCE`,
+            Name: `Force`
+        });
+
+        export const LIGHTNING = DamageFactory<{_ : `SRD.DAMAGE.LIGHTNING`, Name: `Lightning`}>({
+            _: `SRD.DAMAGE.LIGHTNING`,
+            Name: `Lightning`
+        });
+
+        export const NECROTIC = DamageFactory<{_ : `SRD.DAMAGE.NECROTIC`, Name: `Necrotic`}>({
+            _: `SRD.DAMAGE.NECROTIC`,
+            Name: `Necrotic`
+        });
+
+        export const PIERCING = DamageFactory<{_ : `SRD.DAMAGE.PIERCING`, Name: `Piercing`}>({
+            _: `SRD.DAMAGE.PIERCING`,
+            Name: `Piercing`
+        });
+
+        export const POISON = DamageFactory<{_ : `SRD.DAMAGE.POISON`, Name: `Poison`}>({
+            _: `SRD.DAMAGE.POISON`,
+            Name: `Poison`
+        });
+
+        export const PSYCHIC = DamageFactory<{_ : `SRD.DAMAGE.PSYCHIC`, Name: `Psychic`}>({
+            _: `SRD.DAMAGE.PSYCHIC`,
+            Name: `Psychic`
+        });
+
+        export const RADIANT = DamageFactory<{_ : `SRD.DAMAGE.RADIANT`, Name: `Radiant`}>({
+            _: `SRD.DAMAGE.RADIANT`,
+            Name: `Radiant`
+        });
+
+        export const SLASHING = DamageFactory<{_ : `SRD.DAMAGE.SLASHING`, Name: `Slashing`}>({
+            _: `SRD.DAMAGE.SLASHING`,
+            Name: `Slashing`
+        });
+
+        export const THUNDER = DamageFactory<{_ : `SRD.DAMAGE.THUNDER`, Name: `Thunder`}>({
+            _: `SRD.DAMAGE.THUNDER`,
+            Name: `Thunder`
+        });
+
+        /**
+         * Never use this unless checking for the source of damage.
+         */
+        export const MAGICAL = DamageFactory<{_ : S.Damage.SourceType.MAGICAL, Name : 'Magical'}>({
+            _ : S.Damage.SourceType.MAGICAL,
+            Name : 'Magical'
+        });
+
+        /**
+         * Never use this unless checking for the source of damage.
+         */
+        export const NON_MAGICAL = DamageFactory<{_: S.Damage.SourceType.NON_MAGICAL, Name: `Non-magical`}>({
+            _: S.Damage.SourceType.NON_MAGICAL,
+            Name: `Non-magical`
+        });
+
+        export namespace Source {
+            function SourceFactory<T extends S.Damage.SourceType>(Type : T) {
+                return <S extends S.Damage.Source<T>>(Details ?: S["Details"]) => ({ _ : Type, Details})
+            }
+            export const MAGICAL = SourceFactory(S.Damage.SourceType.MAGICAL);
+            export const NON_MAGICAL = SourceFactory(S.Damage.SourceType.NON_MAGICAL);
+            export const ENVIRONMENT = SourceFactory(S.Damage.SourceType.ENVIRONMENT);
+        }
+    }
+
+    export namespace Event {
+        const DEFAULT_PRIORITY = 100;
+        class Event<T extends S.Event.Target, D extends {}> implements S.Event<T, D> {
+            // CONSTANTS
+
+            public Target: T;
+            public Data : D;
+            
+            // MEMBERS
+            
+            private id : string;
+            private name: string;
+            private cancelled : boolean = false;
+            
+            constructor({ ID, Name, Target, Data }: { ID : string, Name : string, Target : T, Data : D}) {
+                this.id = ID;
+                this.name = Name;
+                this.Target = Target;
+                this.Data = Data;
+
+                this.Trigger();
+            } 
+
+            private Trigger() : void {
+                const tmp = this.Handlers().sort((a, b) => (a.Priority ?? DEFAULT_PRIORITY) - (b.Priority ?? DEFAULT_PRIORITY));
+                for (const handler of tmp) {
+                    if(this.cancelled) break;
+                    handler.call(this.Target, this);
+                }
+            }
+
+            get _() : S.Event<T, D>["_"] {
+                return `SRD.EVENT.${this.id}`;
+            }
+
+            get FriendlyName() : string {
+                return this.name;
+            }
+
+            public isCancelled(): boolean {
+                return this.cancelled;
+            }
+
+            public Cancel(): void {
+                this.cancelled = true;
+            }
+
+            public Clone() : S.Event<T, D> {
+                return new Event({ID: this.id, Name : this.name, Target : this.Target, Data : this.Data });
+            }
+
+            public Handlers<D extends {}>(): S.Event.Handler<S.Event.Target, D>[] {
+                return this.Target.Handlers(this as unknown as S.Event<S.Event.Target, D>) as S.Event.Handler<S.Event.Target, D>[];
+            }
+        }
+
+        /**
+         * Makes a factory for handy use in either making new, or handling events.
+         * @param Options The `ID` and `Name` for this event.
+         * @returns `New` event (constructor wrapper) and `Handler` — Event handler factory.  
+         */
+        function EventFactory <D extends {}, T extends S.Event.Target>({ID, Name} : {ID: string, Name : string}) { return ({
+            /**
+             * Creates a new instance of the event.
+             * @param  Options 
+             */
+            New({Target, Data} : {Target : T, Data : D}) { return DND_5E.Event.New<D, T>({ID, Name, Target, Data}) },
+            /**
+             * Creates a new Event Handler for this event.
+             * 
+             * @param Callback The callback function that will be triggered.
+             * 
+             * @param OtherProperties Any other properties a handler could have (e.g. `Priority`)
+            */
+            Handler: (
+                    Callback : (this : T, event : S.Event<T, D>) => void,
+                    OtherProperties?: Omit<S.Event.Handler<T, D>, "_">) =>
+                        Object.assign(Callback, {...OtherProperties, _: `SRD.EVENT.${ID}.HANDLER`}), 
+        })}
+
+        export const New = <D extends {}, T extends S.Event.Target>({ ID, Name, Target, Data }: { ID : string, Name : string, Target : T, Data : D}) => new Event({ID, Name, Target, Data});
+        
+        export type HandlerProps<D extends {}> = Omit<S.Event.Handler<S.Event.Target, D>, "_">;
+        
+        export namespace Entity {
+            export namespace Damage {
+                export const Event = EventFactory<{Damage : S.Damage.Value<S.Damage, S.Damage.Source<S.Damage.SourceType>>, Handled?: number}, S.Event.Target>({ID: `ENTITY.DAMAGE`, Name: `EntityDamageEvent`});
+                
+                const UNIT_DAMAGE = 100;
+
+                /**
+                 * Generates an Event Handler that will modify the damage amount.
+                 * @param Type If the damage is this type.
+                 * @param Callback Do this to the amount
+                 */
+                export function ModifierHandler<D extends S.Damage>(Type : DND_5E.Damage.Factory<D>) {
+                    return  (Callback : (Value : number) => number, OtherProperties?: Omit<S.Event.Handler<S.Event.Target, D>, "_">) => {
+                        return Event.Handler(e => {
+                            const damage = e.Data.Damage;
+
+                            /// So, to check if damage has been handled by a similar handler
+                            ///     We'll check it's effect on a certain unit of damage (e.g. 100)
+                            ///     If the result of one handler's the same as another,
+                            ///     they (most likely) are the same handler.
+
+                            /// NOTE: this may actually break in very rare circumstances.
+                            ///     I guess making UNIT_DAMAGE larger will reduce this chance.
+
+                            if(DND_5E.Damage.Is(damage, Type)) {
+                                if(e.Data.Handled === Callback(UNIT_DAMAGE)) {
+                                    console.warn(`Already handled by previous handler! This Handler's Type : ${Type.Name}`)
+                                    return;
+                                }
+                                damage.Amount = Callback(damage.Amount);
+                                e.Data.Handled = Callback(UNIT_DAMAGE);
+                            };
+
+                        }, OtherProperties)
+                    }
+                }
+
+                export function Resistance<D extends S.Damage>(Type : DND_5E.Damage.Factory<D>, OtherProperties?: Event.HandlerProps<D>) {
+                    return ModifierHandler(Type)(d => Math.floor(d / 2), OtherProperties);
+                }
+                
+                export function Vulnerability<D extends S.Damage>(Type : DND_5E.Damage.Factory<D>, OtherProperties?: Event.HandlerProps<D>) {
+                    return ModifierHandler(Type)(d => d * 2, OtherProperties);
+                }
+                
+                export function Immunity<D extends S.Damage>(Type : DND_5E.Damage.Factory<D>, OtherProperties?: Event.HandlerProps<D>) {
+                    return ModifierHandler(Type)(_d => 0, OtherProperties);
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import { System as S } from "../System";
 import { DND_5E as D } from "../5E";
 
-const testScore = D.Ability.Score.DEX(
+const testScore = D.Ability.Score.(
     D.Ability.Score.Raw(12)
 );
 
