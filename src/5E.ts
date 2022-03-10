@@ -855,6 +855,27 @@ export namespace DND_5E {
             };
         }
     }
-    
+ 
+    export namespace Damage {
+        interface DamageFactory<D extends S.Damage> extends D {
+            /**
+             * Makes a Damage Value object.
+             * @param Amount {number}
+             */
+            (Amount : number) : S.Damage.Value<D>;
+        }
+
+        function DamageFactory<D extends S.Damage>(Type : D) {
+            return Object.assign(
+                (Amount : number) => ({Damage : Type, Amount}),
+                {...D}
+            );
+        }
+
+        export const FIRE = DamageFactory({
+            _   : `SRD.DAMAGE.FIRE`,
+            Name: `Fire`
+        });
+    }
 }
 

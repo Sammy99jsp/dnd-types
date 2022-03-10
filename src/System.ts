@@ -697,4 +697,16 @@ export namespace System {
         }
 
     }
+
+    export interface Damage extends _ {
+        _   : `SRD.DAMAGE.${string}`;
+        Name: string;
+    }
+
+    export namespace Damage {
+        export interface Value<D extends Damage> {
+            Damage : D;
+            Amount : number;
+        }
+    }
 }

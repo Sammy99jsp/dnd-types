@@ -1,4 +1,5 @@
 import { assert } from "console";
+import { DND_5E as D } from "../5E";
 import { ID, System } from "../System";
 import { System as S } from "../system/Event";
 const DEFAULT_PRIORITY = 100;
@@ -84,12 +85,14 @@ function EventFactory <D extends {}, T extends S.Event.Target>({ID, Name} : {ID:
 /// Example Factory usage below.
 const EntityDamageEvent = EventFactory<{Damage : {Type : string, Amount : number}}, S.Event.Target>({ID: `ENTITY.DAMAGE`, Name: `EntityDamageEvent`});
 
-/// Example Fire resistance implementation.
+/// Example Damage resistance implementation.
 const ResistanceFire = EntityDamageEvent.Handler(e => {
     if(e.Data.Damage.Type === "SRD.DAMAGE.FIRE") {
         e.Data.Damage.Amount = Math.floor(e.Data.Damage.Amount / 2);
     }
 });
+
+D.Damage.FIRE(12)
 
 const Logger = EntityDamageEvent.Handler(e => {
     console.log(`Taking ${e.Data.Damage.Amount} ${e.Data.Damage.Type} damage — Ouch(!)`)
@@ -117,3 +120,6 @@ const EventTarget : S.Event.Target = {
 /// Make (and fire) example event.
 
 const DamageEvent = EntityDamageEvent.New({Target: EventTarget, Data: { Damage: { Type : "SRD.DAMAGE.FIRE", Amount : 17 } }});
+
+/// Should display:
+///     "Taking 8 SRD.DAMAGE.FIRE damage — Ouch(!)"  
